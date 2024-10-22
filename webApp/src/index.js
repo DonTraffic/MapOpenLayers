@@ -1,8 +1,8 @@
 import $ from 'jquery'
 import './styles.scss'
 
-import MapHandler from "./MapHandler";
-import SidebarHandler from "./SidebarHandler";
+import MapHandler from "./script/MapHandler";
+import SidebarHandler from "./script/SidebarHandler";
 
 $(document).ready(function() {
     // Глобальные переменные
