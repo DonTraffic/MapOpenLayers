@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор объектов</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: rgb(25, 25, 25);
+        }
+
+        body{
+            width: 100vw;
+            height: 100vh;
+            background-color: rgb(25, 25, 25);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .generator{
+            padding: 16px;
+            background-color: rgb(230, 230, 230);
+            border-radius: 6px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .generator__input{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .generator__input input{
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+            border-bottom: 1px solid rgb(25, 25, 25);
+            outline: none;
+
+            width: 80%;
+            text-align: center;
+        }
+
+        .generator__btn{
+            background-color: rgb(230, 230, 230);
+            border: 1px solid rgb(25, 25, 25);
+            border-radius: 6px;
+            padding: 8px;
+
+            transition: .4s ease;
+        }
+        .generator__btn:hover{
+            cursor: pointer;
+            background-color: rgb(25, 25, 25);
+            color: rgb(230, 230, 230);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="generator">
+            <h1 class="generator__title">Генерация объектов</h1>
+
+            <label class="generator__input">
+                Введите количество объектов
+                <input id="count" min="1" value="500">
+            </label>
+
+            <button class="generator__btn" onclick="generate()">Сгенерировать и скачать</button>
+        </div>
+    </main>
+
+    <script>
+        function getRandomFloat(min, max) {
+            return (Math.random() * (max - min) + min).toFixed(1);
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomDate() {
+            const day = String(getRandomInt(1, 28)).padStart(2, '0');
+            const month = String(getRandomInt(1, 12)).padStart(2, '0');
+            const year = getRandomInt(2000, 2024);
+            return `${day}.${month}.${year}`;
+        }
+
+        function generate() {
+            const count = document.getElementById('count').value;
+            const features = [];
+
+            for (let id = 1; id <= count; id++) {
+                const feature = {
+                    "type": "Feature",
+                    "properties": {
+                        "id": id,
+                        "name": `Точка №${id}`,
+                        "area": parseFloat(getRandomFloat(10.0, 100.0)),
+                        "status": Math.random() < 0.5,
+                        "date_create": getRandomDate(),
+                        "type": getRandomInt(1, 5)
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            getRandomFloat(-180, 180),
+                            getRandomFloat(-90, 90)
+                        ]
+                    }
+                };
+                features.push(feature);
+            }
+
+            const jsonData = JSON.stringify(features, null, 2);
+            downloadJSON(jsonData, 'data.json');
+        }
+
+        function downloadJSON(data, filename) {
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

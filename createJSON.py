@@ -3,8 +3,7 @@ import random
 from datetime import datetime, timedelta
 
 def create_geojson_feature(id):
-    # Генерация атрибутов
-    name = f"Feature {id}"
+    name = f"Точка №{id}"
     area = round(random.uniform(10.0, 100.0), 2)  # Площадь от 10.0 до 100.0
     status = random.choice([True, False])  # Случайный статус
     date_create = (datetime.now() - timedelta(days=random.randint(0, 365))).date().isoformat()  # Случайная дата за последний год
